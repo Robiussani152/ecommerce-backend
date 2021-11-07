@@ -12,21 +12,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    public $user_service;
+    public $userService;
 
-    public function __construct(UserService $user_service)
+    public function __construct(UserService $userService)
     {
-        $this->user_service = $user_service;
+        $this->userService = $userService;
     }
 
     public function login(LoginRequest $request)
     {
-        return $this->user_service->login($request);
+        return $this->userService->login($request);
     }
 
     public function register(RegisterRequest $request)
     {
-        return $this->user_service->register($request);
+        return $this->userService->register($request);
     }
 
     public function getAuthUser(Request $request)

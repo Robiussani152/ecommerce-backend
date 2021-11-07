@@ -26,14 +26,14 @@ class UserService
      */
     public function login(Request $request)
     {
-        $find_user = $this->user->where('email', $request->email)
+        $findUser = $this->user->where('email', $request->email)
             ->first();
 
-        if (!$find_user || !Hash::check($request->password, $find_user->password)) {
+        if (!$findUser || !Hash::check($request->password, $findUser->password)) {
             return apiJsonResponse('error', ['email' => __('auth.failed')], __('auth.failed'), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $data = $this->respondWithToken($find_user);
+        $data = $this->respondWithToken($findUser);
         return apiJsonResponse('success', $data, __('auth.success'), Response::HTTP_OK);
     }
 
@@ -42,11 +42,11 @@ class UserService
         // Revoke all tokens...
         //TODO::enable this one when going for production
         $user->tokens()->delete();
-        $api_scope = [];
+        $apiScope = [];
         if ($user->user_type == 'admin')
-            $api_scope = ['product:add,edit,delete,quantity-update', 'order:status-update', ''];
+            $apiScope = ['add-product', 'update-product', 'delete-product', 'product-stock-update', 'order-status-update'];
 
-        $token = $user->createToken($user->name, $api_scope)->plainTextToken;
+        $token = $user->createToken($user->name, $apiScope)->plainTextToken;
         return [
             'access_token' => explode('|', $token)[1],
             'token_type' => 'Bearer',
@@ -54,14 +54,14 @@ class UserService
         ];
     }
 
-    public function register(Request $request, $user_type = 'user')
+    public function register(Request $request, $userType = 'user')
     {
         try {
             User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'user_type' => $user_type
+                'user_type' => $userType
             ]);
             return $this->login($request);
         } catch (Exception $ex) {

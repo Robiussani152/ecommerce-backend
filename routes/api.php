@@ -29,4 +29,8 @@ Route::get('products', [ProductController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', [AuthController::class, 'getAuthUser']);
+    Route::post('products', [ProductController::class, 'store'])->middleware('ability:add-product');
+    Route::put('products/{id}', [ProductController::class, 'update'])->middleware('ability:update-product');
+    Route::delete('products/{id}', [ProductController::class, 'destroy'])->middleware('ability:delete-product');
+    Route::post('update-stock', [ProductController::class, 'updateStock'])->middleware('ability:product-stock-update');
 });
