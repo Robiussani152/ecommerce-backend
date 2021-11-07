@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('update-stock', [ProductController::class, 'updateStock'])->middleware('ability:product-stock-update');
 
     //order related routes
+    Route::get('orders', [OrderController::class, 'getAllOrders']);
     Route::post('place-order', [OrderController::class, 'placeOrder']);
     Route::post('update-order/{id}', [OrderController::class, 'updateOrder']);
     Route::get('order-details/{id}', [OrderController::class, 'getOrder']);

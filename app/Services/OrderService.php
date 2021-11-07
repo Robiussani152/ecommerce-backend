@@ -24,6 +24,20 @@ class OrderService
         $this->productService = $productService;
     }
 
+    public function getOrders(Request $request)
+    {
+        $orders = $this->order->select('id', 'customer_id', 'invoice_no', 'status', 'created_at')->with(['customer:id,name'])
+            ->when($request->order_no, function ($q) use ($request) {
+                $q->where('invoice_no', 'like', '%' . $request->order_no . '%');
+            })->when($request->status, function ($q) use ($request) {
+                $q->where('status', $request->status);
+            })->when(auth()->user()->user_type == 'user', function ($q) {
+                $q->when('customer_id', auth()->id());
+            })
+            ->simplePaginate(10);
+        return apiJsonResponse('success', $orders, 'Orders list', Response::HTTP_OK);
+    }
+
     public function placeOrder(Request $request, $id = "")
     {
         try {
