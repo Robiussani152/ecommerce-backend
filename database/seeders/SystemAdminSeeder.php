@@ -18,12 +18,21 @@ class SystemAdminSeeder extends Seeder
     public function run()
     {
         try {
-            User::create([
-                'name' => 'System Admin',
-                'email' => 'admin@system.com',
-                'password' => Hash::make('12345678'),
-                'user_type' => 'admin'
-            ]);
+            $data = [
+                [
+                    'name' => 'System Admin',
+                    'email' => 'admin@example.com',
+                    'password' => Hash::make('password'),
+                    'user_type' => 'admin'
+                ],
+                [
+                    'name' => 'System Buyer',
+                    'email' => 'user@example.com',
+                    'password' => Hash::make('password'),
+                    'user_type' => 'user'
+                ],
+            ];
+            User::insert($data);
         } catch (Exception $ex) {
             Log::debug($ex->getMessage());
         }

@@ -33,4 +33,10 @@ class AuthController extends Controller
     {
         return apiJsonResponse('success', new UserResource($request->user()), 'Get auth user data.', Response::HTTP_OK);
     }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return apiJsonResponse('success', [], 'Successfully logged out!', Response::HTTP_OK);
+    }
 }

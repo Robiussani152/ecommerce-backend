@@ -42,4 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('update-order/{id}', [OrderController::class, 'updateOrder']);
     Route::get('order-details/{id}', [OrderController::class, 'getOrder']);
     Route::post('order-status-update/{id}', [OrderController::class, 'updateOrderStatus'])->middleware('ability:order-status-update');
+
+    //logout
+    Route::post('logout', [AuthController::class, 'logout']);
 });
