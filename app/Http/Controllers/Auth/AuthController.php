@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 class AuthController extends Controller
 {
     public $user_service;
+
     public function __construct(UserService $user_service)
     {
         $this->user_service = $user_service;

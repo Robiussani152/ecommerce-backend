@@ -50,7 +50,7 @@ class UserService
         return [
             'access_token' => explode('|', $token)[1],
             'token_type' => 'Bearer',
-            'user' => new UserResource($user),
+            'user' => new UserResource($user)
         ];
     }
 
