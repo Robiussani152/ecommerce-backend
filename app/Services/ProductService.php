@@ -25,7 +25,7 @@ class ProductService
         $products = $this->product
             ->when($search_query, function ($q) use ($search_query) {
                 $q->where('name', 'like', '%' . $search_query . '%');
-            })->when($order_column and $order_by, function ($q) use ($order_column, $order_by) {
+            })->when(($order_column && $order_by), function ($q) use ($order_column, $order_by) {
                 $q->orderBy($order_column, $order_by);
             })
             ->simplePaginate($limit);
@@ -58,13 +58,13 @@ class ProductService
         return apiJsonResponse('success', [], __('custom.delete_success'), Response::HTTP_OK);
     }
 
-    public function updateProductStock(Request $request)
+    public function updateProductStock($productId, $quantity)
     {
-        $product = $this->product->find($request->product_id);
-        $this->productStockUpdateHistory($request->product_id, $product->quantity, $request->quantity);
-        $product->quantity = $request->quantity + $product->quantity;
+        $product = $this->product->find($productId);
+        $this->productStockUpdateHistory($productId, $product->quantity, $quantity);
+        $product->quantity = $quantity + $product->quantity;
         $product->save();
-        return apiJsonResponse('success', [], __('custom.creation_success'), Response::HTTP_OK);
+        return;
     }
 
     protected function productStockUpdateHistory($productId, $oldQuantity, $inputQuantity)

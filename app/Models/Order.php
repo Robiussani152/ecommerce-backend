@@ -11,6 +11,14 @@ class Order extends Model
 {
     use HasFactory;
 
+    //order status
+    public const PENDING = 'pending';
+    public const APPROVED = 'approved';
+    public const REJECTED = 'rejected';
+    public const PROCESSING = 'processing';
+    public const SHIPPED = 'shipped';
+    public const DELIVERED = 'delivered';
+
     protected $fillable = [
         'customer_id',
         'invoice_no',

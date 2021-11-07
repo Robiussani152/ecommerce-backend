@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 if (!function_exists('apiJsonResponse')) {
@@ -23,5 +24,13 @@ if (!function_exists('storageLink')) {
         } else {
             return Storage::url($defaultImage);
         }
+    }
+}
+
+if (!function_exists('prefixGenerator')) {
+    function prefixGenerator(Model $model, $prefix = 'WD-')
+    {
+        $countNumber = $model::count();
+        return $prefix . sprintf('%06d', $countNumber + 1);
     }
 }

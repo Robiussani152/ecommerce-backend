@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
+use App\Services\ProductService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
-use App\Services\ProductService;
-use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
@@ -42,6 +43,7 @@ class ProductController extends Controller
             'product_id' => 'bail|required|exists:products,id',
             'quantity' => 'bail|required|numeric'
         ]);
-        return $this->productService->updateProductStock($request);
+        $this->productService->updateProductStock($request->product_id, $request->quantity);
+        return apiJsonResponse('success', [], __('custom.creation_success'), Response::HTTP_OK);
     }
 }
