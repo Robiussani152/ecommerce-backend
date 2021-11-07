@@ -30,11 +30,11 @@ class UserService
             ->first();
 
         if (!$find_user || !Hash::check($request->password, $find_user->password)) {
-            return apiJsonResponse(Response::HTTP_UNPROCESSABLE_ENTITY, ['email' => __('auth.failed')], __('auth.failed'));
+            return apiJsonResponse('error', ['email' => __('auth.failed')], __('auth.failed'), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $data = $this->respondWithToken($find_user);
-        return apiJsonResponse(Response::HTTP_OK, $data, __('auth.success'));
+        return apiJsonResponse('success', $data, __('auth.success'), Response::HTTP_OK);
     }
 
     protected function respondWithToken($user)
@@ -65,7 +65,7 @@ class UserService
             ]);
             return $this->login($request);
         } catch (Exception $ex) {
-            return apiJsonResponse(Response::HTTP_NOT_ACCEPTABLE, ['error' => $ex->getMessage()], __('custom.creation_failed'));
+            return apiJsonResponse('error', ['error' => $ex->getMessage()], __('custom.creation_failed'), Response::HTTP_NOT_ACCEPTABLE);
         }
     }
 }

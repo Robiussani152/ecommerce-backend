@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('quantity')->default(0);
             $table->string('image')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
