@@ -5,17 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderDetails extends Model
+class OrderEditHistory extends Model
 {
     use HasFactory;
 
-    public function deatilsable()
+    public function historyable()
     {
         return $this->morphTo();
-    }
-
-    public function histories()
-    {
-        return $this->morphMany(OrderEditHistory::class, 'historyable');
     }
 }
