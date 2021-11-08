@@ -19,7 +19,7 @@ class CreateOrdersTable extends Migration
             $table->string('invoice_no', 50)->nullable();
             $table->float('total_amount', 8, 2)->default(0);
             $table->string('status', 50)->nullable();
-            $table->text('instruction');
+            $table->text('instruction')->nullable();
             $table->timestamps();
         });
     }

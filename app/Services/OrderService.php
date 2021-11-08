@@ -28,15 +28,21 @@ class OrderService
 
     public function getOrders(Request $request)
     {
-        $orders = $this->order->select('id', 'customer_id', 'invoice_no', 'status', 'created_at')->with(['customer:id,name'])
-            ->when($request->order_no, function ($q) use ($request) {
+        if ($request->has('status') and $request->status == $this->order::DELIVERED) {
+            $orders = $this->deliveredOrder->query();
+        } else {
+            $orders = $this->order->query();
+        }
+        $orders = $orders->select('id', 'customer_id', 'invoice_no', 'status', 'created_at', 'total_amount')->with(['customer:id,name'])
+            ->when($request->invoice_no, function ($q) use ($request) {
                 $q->where('invoice_no', 'like', '%' . $request->order_no . '%');
             })->when($request->status, function ($q) use ($request) {
                 $q->where('status', $request->status);
-            })->when(auth()->user()->user_type == 'user', function ($q) {
-                $q->when('customer_id', auth()->id());
+            })->when(auth()->check() and auth()->user()->user_type == 'user', function ($q) {
+                $q->where('customer_id', auth()->id());
             })
-            ->simplePaginate(10);
+            ->paginate(10);
+
         return apiJsonResponse('success', $orders, 'Orders list', Response::HTTP_OK);
     }
 
@@ -61,7 +67,7 @@ class OrderService
             return apiJsonResponse('success', new OrderResource($order), 'Order successfully placed', Response::HTTP_OK);
         } catch (Throwable $ex) {
             DB::rollBack();
-            return apiJsonResponse('error', [], 'Something went wrong', Response::HTTP_NOT_ACCEPTABLE);
+            return apiJsonResponse('error', ['message' => $ex->getMessage()], 'Something went wrong', Response::HTTP_NOT_ACCEPTABLE);
         }
     }
 
