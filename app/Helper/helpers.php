@@ -30,7 +30,19 @@ if (!function_exists('storageLink')) {
 if (!function_exists('prefixGenerator')) {
     function prefixGenerator(Model $model, $prefix = 'WD-')
     {
-        $countNumber = $model::count();
-        return $prefix . sprintf('%06d', $countNumber + 1);
+        $countNumber = getRandomNumber(6);
+        return $prefix . sprintf('%07d', $countNumber + 1);
+    }
+}
+
+if (!function_exists('getRandomNumber')) {
+    function getRandomNumber($length = 8)
+    {
+        $characters = '0123456789';
+        $string = '';
+        for ($i = 0; $i < $length; $i++) {
+            $string .= $characters[mt_rand(0, strlen($characters) - 1)];
+        }
+        return $string;
     }
 }

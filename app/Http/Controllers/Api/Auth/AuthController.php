@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
-use App\Http\Resources\UserResource;
-use App\Services\UserService;
 use Illuminate\Http\Request;
+use App\Services\UserService;
+use App\Http\Requests\LoginRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use App\Http\Requests\RegisterRequest;
+use Illuminate\Support\Facades\Broadcast;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Broadcasting\Broadcasters\PusherBroadcaster;
 
 class AuthController extends Controller
 {

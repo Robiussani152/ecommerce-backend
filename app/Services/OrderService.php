@@ -2,16 +2,20 @@
 
 namespace App\Services;
 
-use App\Http\Resources\OrderResource;
-use App\Models\DeliveredOrder;
+use Exception;
+use Throwable;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderDetails;
-use App\Models\OrderEditHistory;
-use Exception;
 use Illuminate\Http\Request;
+use App\Models\DeliveredOrder;
+use App\Models\OrderEditHistory;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\OrderResource;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\OrderPlacedNotification;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
 
 class OrderService
 {
@@ -50,10 +54,12 @@ class OrderService
     {
         try {
             DB::beginTransaction();
+            $newOrder = true;
             $order = $this->order;
             if ($id) {
                 $order = $this->order->find($id);
                 $this->addOrderHistory($order);
+                $newOrder = false;
             } else {
                 $order->customer_id = auth()->id();
                 $order->invoice_no = prefixGenerator($this->order);
@@ -64,6 +70,9 @@ class OrderService
             $order->save();
             $this->insertOrderDetails($request->items, $order);
             DB::commit();
+            if ($newOrder) {
+                $this->sendNotificationToAdmin($order);
+            }
             return apiJsonResponse('success', new OrderResource($order), 'Order successfully placed', Response::HTTP_OK);
         } catch (Throwable $ex) {
             DB::rollBack();
@@ -166,6 +175,17 @@ class OrderService
             } catch (Throwable $ex) {
                 DB::rollBack();
             }
+        }
+    }
+
+    public function sendNotificationToAdmin(Order $order)
+    {
+        try {
+            $user = User::where('email', 'admin@example.com')
+                ->first();
+            Notification::send($user, new OrderPlacedNotification($order));
+        } catch (Throwable $ex) {
+            Log::debug("place order notification issue: " . $ex->getMessage());
         }
     }
 }
