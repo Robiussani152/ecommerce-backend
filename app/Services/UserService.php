@@ -30,7 +30,9 @@ class UserService
             ->first();
 
         if (!$findUser || !Hash::check($request->password, $findUser->password)) {
-            return apiJsonResponse('error', ['email' => __('auth.failed')], __('auth.failed'), Response::HTTP_UNPROCESSABLE_ENTITY);
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
         }
 
         $data = $this->respondWithToken($findUser);

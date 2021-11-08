@@ -28,8 +28,15 @@ class ProductService
             })->when(($order_column && $order_by), function ($q) use ($order_column, $order_by) {
                 $q->orderBy($order_column, $order_by);
             })
-            ->simplePaginate($limit);
+            ->paginate($limit);
         return ProductResource::collection($products);
+    }
+
+    public function getSpecificProduct($id)
+    {
+        $product = $this->product
+            ->find($id);
+        return apiJsonResponse('success', new ProductResource($product), 'Product details', Response::HTTP_OK);
     }
 
     public function addOrUpdateProduct(Request $request, $id = "")
@@ -54,7 +61,7 @@ class ProductService
 
     public function deleteProduct($id)
     {
-        $this->product->delete($id);
+        $this->product->destroy($id);
         return apiJsonResponse('success', [], __('custom.delete_success'), Response::HTTP_OK);
     }
 

@@ -27,6 +27,7 @@ Route::post('register', [AuthController::class, 'register'])->middleware('guest'
  */
 
 Route::get('products', [ProductController::class, 'index']);
+Route::get('products/{id}', [ProductController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', [AuthController::class, 'getAuthUser']);

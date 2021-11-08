@@ -20,9 +20,9 @@ if (!function_exists('storageLink')) {
     {
         $defaultImage = 'images/logo.png';
         if ($url && Storage::disk('public')->exists($url)) {
-            return Storage::url($url);
+            return asset(Storage::url($url));
         } else {
-            return Storage::url($defaultImage);
+            return asset(Storage::url($defaultImage));
         }
     }
 }

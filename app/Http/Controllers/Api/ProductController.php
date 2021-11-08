@@ -19,7 +19,7 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        return $this->productService->getAllProducts($request->q, $request->order_col, $request->order);
+        return $this->productService->getAllProducts($request->query_string, $request->order_col, $request->order);
     }
 
     public function store(ProductRequest $request)
@@ -30,6 +30,11 @@ class ProductController extends Controller
     public function update(ProductRequest $request, $id)
     {
         return $this->productService->addOrUpdateProduct($request, $id);
+    }
+
+    public function show($id)
+    {
+        return $this->productService->getSpecificProduct($id);
     }
 
     public function destroy($id)
