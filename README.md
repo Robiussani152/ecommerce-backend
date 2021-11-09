@@ -20,6 +20,10 @@ Password: 'password'
 2. User
 Email: user@example.com
 Password: 'password'
-```
 
+```
+---
+You can find out the api docs **[Postman Docs](https://documenter.getpostman.com/view/18053871/UVC3kTL6)**
+
+---
 ### Regards **[Robius Sani](https://github.com/Robiussani152)**
