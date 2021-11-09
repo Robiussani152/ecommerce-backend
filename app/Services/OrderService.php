@@ -9,12 +9,11 @@ use App\Models\Order;
 use App\Models\OrderDetails;
 use Illuminate\Http\Request;
 use App\Models\DeliveredOrder;
+use App\Events\OrderPlacedEvent;
 use App\Models\OrderEditHistory;
 use Illuminate\Support\Facades\DB;
-use App\Http\Resources\OrderResource;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\OrderPlacedNotification;
 use Illuminate\Support\Facades\Log;
+use App\Http\Resources\OrderResource;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderService
@@ -181,9 +180,8 @@ class OrderService
     public function sendNotificationToAdmin(Order $order)
     {
         try {
-            $user = User::where('email', 'admin@example.com')
-                ->first();
-            Notification::send($user, new OrderPlacedNotification($order));
+            $message = "Order received {$order->invoice_no} total amount of {$order->total_amount}";
+            event(new OrderPlacedEvent($message));
         } catch (Throwable $ex) {
             Log::debug("place order notification issue: " . $ex->getMessage());
         }

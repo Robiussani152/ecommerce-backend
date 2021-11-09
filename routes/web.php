@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\OrderPlacedEvent;
 use App\Models\Order;
 use App\Models\User;
 use App\Notifications\OrderPlacedNotification;
@@ -21,7 +22,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/send-notification', function () {
-    $user = User::find(1);
     $order = Order::find(2);
-    Notification::send($user, new OrderPlacedNotification($order));
+    $message = "Order received {$order->invoice_no} total amount of {$order->total_amount}";
+    event(new OrderPlacedEvent($message));
 });
