@@ -1,5 +1,10 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
+![GitHub repo size](https://img.shields.io/github/repo-size/Robiussani152/ecommerce-backend?style=plastic)
+![GitHub language count](https://img.shields.io/github/languages/count/Robiussani152/ecommerce-backend?style=plastic)
+![GitHub top language](https://img.shields.io/github/languages/top/Robiussani152/ecommerce-backend?style=plastic)
+![GitHub last commit](https://img.shields.io/github/last-commit/Robiussani152/ecommerce-backend?color=red&style=plastic)
+
 ```
 Please follow the instructions
 ```
